@@ -50,5 +50,6 @@ test:
 production:
   <<: *default
   database: rweckersample_production
-  username: rweckersample
-  password: <%= ENV['RWECKERSAMPLE_DATABASE_PASSWORD'] %>
+  username: root
+  password: #<%= ENV['RWECKERSAMPLE_DATABASE_PASSWORD'] %>
+  socket: /var/lib/mysql/mysql.sock
