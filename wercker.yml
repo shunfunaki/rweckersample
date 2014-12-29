@@ -44,6 +44,30 @@ build:
         - script:
             name: Run rspec
             code: bundle exec rspec
-
-
-
+    after-steps:
+        - hipchat-notify:
+            token: $HIPCHAT_TOKEN
+            room-id: 1083994
+            from-name: wercker
+deploy:
+    steps:
+        - script:
+            name: make .ssh directory
+            code: mkdir -p "$HOME/.ssh"
+        - create-file:
+            name: write ssh key
+            filename: $HOME/.ssh/id_rsa
+            overwrite: true
+            hide-from-log: true
+            content: $WERCKER_PEM_KEY
+        - script:
+            name: set permissions for ssh key
+            code: chmod 0400 $HOME/.ssh/id_rsa
+        - cap:
+            stage: production
+            tasks: deploy
+    after-steps:
+        - hipchat-notify:
+            token: $HIPCHAT_TOKEN
+            room-id: 1083994
+            from-name: wercker
